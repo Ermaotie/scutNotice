@@ -4,9 +4,8 @@
   "description": "scripy the news about scut",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js",
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
