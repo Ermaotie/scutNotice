@@ -1,14 +1,14 @@
 module.exports = function (app,mongodb,conf) {
     app.get('/code2session',(req,res)=>{
-        if(req.param.openid){
+        console.log(req.query)
+        if(req.query.openid){
             var collection = mongodb.collection('openid');
-            collection.insert({openid:req.param.openid},(err,res)=>{
+            collection.insertOne({openid:req.query.openid},(err,result)=>{
                 if(err){
                     throw err;
-                } else{
-                    res.send("Success");
                 }
             });
+            res.send("Success");
         } else{
             res.send("Default");
         }
