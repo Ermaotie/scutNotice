@@ -1,5 +1,6 @@
 const searchRoutes = require('./search');
 const repair = require('./repair');
+const code2session = require('./code2session');
 var getContent = require('../utils/getContent');
 var axios = require('axios');
 var qs = require('qs');
@@ -8,7 +9,8 @@ var qs = require('qs');
 module.exports = function(app, mongodb,conf) {
   // Other route groups could go here, in the future
   searchRoutes(app,mongodb,conf);
-  repair(app,mongodb,conf)
+  repair(app,mongodb,conf);
+  code2session(app,mongodb,conf);
 
   var data = qs.stringify({
     'category': '0',
