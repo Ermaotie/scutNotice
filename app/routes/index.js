@@ -1,5 +1,6 @@
 const searchRoutes = require('./search');
 const repair = require('./repair');
+var getContent = require('../utils/getContent');
 var axios = require('axios');
 var qs = require('qs');
 
@@ -27,40 +28,43 @@ module.exports = function(app, mongodb,conf) {
         data : data
   };
   app.post('/', (req, res) => {
-  axios(config)
-  .then(function (response) {
-    notices = response.data;
-    //   console.log(notices.list);
-    var nList = notices['list']
-    .map(function(item) {
-        return {
-            "nid": item.id,
-            "createTime" : item.createTime,
-            "title" : item.title,
-            "tag" : item.tag,
-            "url" : conf.baseLink + item.id
-        }
-    });
-
-    var collection = mongodb.collection("notices");
-    // perform actions on the collection object
-    nList.forEach(element => {
-            collection.find(element).toArray(function (err,res) {
-                console.log(res.length == 0);
-                if (res.length == 0) {
-                    collection.insertOne(element,function(err,res) {
-                        if (err) throw err;
-                        console.log('Inserted')
-                    })
-                }
-            });
-  });
-      })
-      .catch(function (error) {
-          res.send('Default');
-          console.log(error);
+    axios(config)
+    .then(function (response) {
+      notices = response.data;
+      //   console.log(notices.list);
+      var nList = notices['list']
+      .map(function(item) {
+          return {
+              "nid": item.id,
+              "createTime" : item.createTime,
+              "title" : item.title,
+              "tag" : item.tag,
+              "url" : conf.baseLink + item.id
+          }
       });
-      res.send('Success');
+
+      var collection = mongodb.collection("notices");
+      // perform actions on the collection object
+      nList.forEach(element => {
+              collection.find(element).toArray(function (err,res) {
+                  console.log(res.length == 0);
+                  if (res.length == 0) {
+                    getContent(element.url,function (value) {
+                      element.content = value;
+                      collection.insertOne(element,function(err,res) {
+                        if (err) throw err;
+                        console.log('Inserted: '+ value.title);
+                    })
+                    });
+                  }
+              });
+      });
+    })
+    .catch(function (error) {
+        res.send('Default');
+        console.log(error);
+    });
+    res.send('Success');
   });
 
   app.get('/', (req, res) => {

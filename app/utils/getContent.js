@@ -1,7 +1,7 @@
 var cheerio = require('cheerio');
 var axios = require('axios');
 
-module.exports = function(url){
+module.exports = function(url,callback){
     var config = {
         method: 'get',
         url: url,
@@ -15,7 +15,8 @@ module.exports = function(url){
         var ptext = $('div[class=content] p').text();
         console.log("获取文章内容成功");
         // console.log(ptext);
-        return ptext
+        // return ptext;
+        callback(ptext);
       })
       .catch(function (error) {
         console.log(error);

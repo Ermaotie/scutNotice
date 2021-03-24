@@ -15,9 +15,14 @@ const port = process.env.PORT || 8443;
 
 const mongoClient = new MongoClient(db.url, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoClient.connect(err => {
-  const mongodb = mongoClient.db(db.dbName);
+  if(err) {
+    throw err;
+  } else{
+    const mongodb = mongoClient.db(db.dbName);
   require('./app/routes')(app, mongodb,conf);
   app.listen(port, () => {
   console.log('We are live on ' + port);
 });
+  }
+  
 })
