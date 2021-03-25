@@ -98,7 +98,7 @@ module.exports = function(app, mongodb,conf) {
                       collection.insertOne(element,function(err,res) {
                         if (err) throw err;
                         console.log('Inserted: '+ element.title);
-                        sendMsg(element);
+                        sendMsg(mongodb,element);
                     })
                     });
                   }
