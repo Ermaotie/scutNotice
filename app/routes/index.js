@@ -2,14 +2,15 @@ const searchRoutes = require('./search');
 const repair = require('./repair');
 const code2session = require('./code2session');
 var getContent = require('../utils/getContent');
+var sendMsg = require('../utils/pushMsg');
 var axios = require('axios');
 var qs = require('qs');
+const getToken = require('../utils/getToken');
 
 
 module.exports = function(app, mongodb,conf) {
   // Other route groups could go here, in the future
   searchRoutes(app,mongodb,conf);
-  repair(app,mongodb,conf);
   code2session(app,mongodb,conf);
 
   var data = qs.stringify({
@@ -92,10 +93,14 @@ module.exports = function(app, mongodb,conf) {
               collection.find(element).toArray(function (err,res) {
                   console.log(res.length == 0);
                   if (res.length == 0) {
+                    getContent(element.url,function (value) {
+                      element.content = value;
                       collection.insertOne(element,function(err,res) {
-                          if (err) throw err;
-                          console.log('Inserted')
-                      })
+                        if (err) throw err;
+                        console.log('Inserted: '+ value.title);
+                        sendMsg(Element);
+                    })
+                    });
                   }
               });
       });
