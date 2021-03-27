@@ -3,6 +3,7 @@ const repair = require('./repair');
 const code2session = require('./code2session');
 var getContent = require('../utils/getContent');
 var sendMsg = require('../utils/pushMsg');
+var {sendMail} = require('../utils/sendMail')
 var axios = require('axios');
 var qs = require('qs');
 const getToken = require('../utils/getToken');
@@ -31,6 +32,7 @@ module.exports = function(app, mongodb,conf) {
         data : data
   };
   app.post('/', (req, res) => {
+    // You'll create your note here.
     axios(config)
     .then(function (response) {
       notices = response.data;
@@ -56,7 +58,10 @@ module.exports = function(app, mongodb,conf) {
                       element.content = value;
                       collection.insertOne(element,function(err,res) {
                         if (err) throw err;
-                        console.log('Inserted: '+ value.title);
+                        console.log('Inserted: '+ element.title);
+                        // sendMsg(mongodb,element);
+                        sendMail(mongodb,element.content)
+                        
                     })
                     });
                   }
@@ -98,7 +103,9 @@ module.exports = function(app, mongodb,conf) {
                       collection.insertOne(element,function(err,res) {
                         if (err) throw err;
                         console.log('Inserted: '+ element.title);
-                        sendMsg(mongodb,element);
+                        // sendMsg(mongodb,element);
+                        sendMail(mongodb,element.content)
+                        
                     })
                     });
                   }

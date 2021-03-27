@@ -12,7 +12,7 @@ module.exports = function(url,callback){
       axios(config)
       .then(function (response) {
         var $ = cheerio.load(response.data);
-        var ptext = $('div[class=content] p').text();
+        var ptext = $('div[class=content]').html();
         console.log("获取文章内容成功");
         // console.log(ptext);
         // return ptext;
