@@ -10,4 +10,10 @@ module.exports = function(app,mongodb,conf){
             }
         });
     })
+    app.get('/search/:keyword',(req,res)=>{
+        var details = {'content':{$regex:req.params.keyword}};
+        mongodb.collection('notices').find(details).sort({"createTime":-1}).toArray((err,item)=>{
+            res.send(item);
+        })
+    })
 }
