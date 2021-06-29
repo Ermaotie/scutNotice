@@ -54,7 +54,7 @@ module.exports = function(app, mongodb,conf) {
   app.post('/', (req, res) => {
     // You'll create your note here.
     res.send("Running")
-    for(var i=0;i<config[i].length;i++){
+    for(var i=0;i<config.length;i++){
       axios(config[i])
     .then(function (response) {
       notices = response.data;
@@ -69,6 +69,7 @@ module.exports = function(app, mongodb,conf) {
               "url" : conf.baseLink + item.id
           }
       });
+      console.log(nList)
 
       var collection = mongodb.collection("notices");
       // perform actions on the collection object
@@ -100,7 +101,7 @@ module.exports = function(app, mongodb,conf) {
   app.get('/', (req, res) => {
     // You'll create your note here.
     res.send("Running")
-    for(var i=0;i<config[i].length;i++){
+    for(var i=0;i<config.length;i++){
     axios(config[i])
     .then(function (response) {
       notices = response.data;
