@@ -14,6 +14,7 @@ module.exports = function(app, mongodb,conf) {
   // Other route groups could go here, in the future
   searchRoutes(app,mongodb,conf);
   code2session(app,mongodb,conf);
+  rss(app)
 
   var data = [qs.stringify({
     'category': '0',
