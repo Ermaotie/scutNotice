@@ -25,7 +25,7 @@ module.exports = function(app){
     app.get('/rss',(req,res) => {
         axios(config)
         .then(function (response) {
-        return JSON.stringify(response.data);
+        res.send(JSON.stringify(response.data));
     })
     .catch(function (error) {
         console.log(error);
