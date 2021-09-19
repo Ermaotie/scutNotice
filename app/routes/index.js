@@ -7,6 +7,7 @@ var {sendMail} = require('../utils/sendMail')
 var axios = require('axios');
 var qs = require('qs');
 const getToken = require('../utils/getToken');
+var rss = require('./rss')
 
 
 module.exports = function(app, mongodb,conf) {
